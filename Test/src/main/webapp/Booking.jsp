@@ -11,8 +11,88 @@
 <script src="Script/Booking.js"></script>
 </head>
 <body>
-	<div style="height: 100vh; background-color: #4169E1;">
-		<div></div>
+	<div style="background-color: #4169E1;">
+		<div>
+			<input type="hidden" id="hdnSelectedSlots" name="SelectedSlots" value="">
+			<div class="Level form-group">
+				<div class="Title form-group" style="text-align: center;">LEVEL
+					1</div>
+				<div class="row">
+					<div class="col-md-2 Slot Free" id="divL1S1" 
+						onclick="onclickSlotc('L1S1')">S1</div>
+					<div class="col-md-2 Slot Free" id="divL1S2"
+						onclick="onclickSlotc('L1S2')">S2</div>
+					<div class="col-md-2 Slot Free" id="divL1S3"
+						onclick="onclickSlotc('L1S3')">S3</div>
+					<div class="col-md-2 Slot Free" id="divL1S4"
+						onclick="onclickSlotc('L1S4')">S4</div>
+					<div class="col-md-2 Slot Free" id="divL1S5"
+						onclick="onclickSlotc('L1S5')">S5</div>
+					<div class="col-md-2 Slot Free" id="divL1S6"
+						onclick="onclickSlotc('L1S6')">S6</div>
+					<div class="col-md-2 Slot Free" id="divL1S7"
+						onclick="onclickSlotc('L1S7')">S7</div>
+					<div class="col-md-2 Slot Free" id="divL1S8"
+						onclick="onclickSlotc('L1S8')">S8</div>
+					<div class="col-md-2 Slot Free" id="divL1S9"
+						onclick="onclickSlotc('L1S9')">S9</div>
+					<div class="col-md-2 Slot Free" id="divL1S10"
+						onclick="onclickSlotc('L1S10')">S10</div>
+					<div class="col-md-2 Slot Free" id="divL1S11"
+						onclick="onclickSlotc('L1S11')">S11</div>
+					<div class="col-md-2 Slot Free" id="divL1S12"
+						onclick="onclickSlotc('L1S12')">S12</div>
+					<div class="col-md-2 Slot Free" id="divL1S13"
+						onclick="onclickSlotc('L1S13')">S13</div>
+					<div class="col-md-2 Slot Free" id="divL1S14"
+						onclick="onclickSlotc('L1S14')">S14</div>
+					<div class="col-md-2 Slot Free" id="divL1S15"
+						onclick="onclickSlotc('L1S15')">S15</div>
+					<div class="col-md-2 Slot Free" id="divL1S16"
+						onclick="onclickSlotc('L1S16')">S16</div>
+					<div class="col-md-2 Slot Free" id="divL1S17"
+						onclick="onclickSlotc('L1S17')">S17</div>
+					<div class="col-md-2 Slot Free" id="divL1S18"
+						onclick="onclickSlotc('L1S18')">S18</div>
+					<div class="col-md-2 Slot Free" id="divL1S19"
+						onclick="onclickSlotc('L1S19')">S19</div>
+					<div class="col-md-2 Slot Free" id="divL1S20"
+						onclick="onclickSlotc('L1S20')">S20</div>
+				</div>
+			</div>
+			<div class="Level form-group">
+				<div class="Title form-group" style="text-align: center;">LEVEL
+					2</div>
+				<div class="row">
+					<div class="col-md-2 Slot Free" id="divL2S1"
+						onclick="onclickSlotc('L2S1')">S1</div>
+					<div class="col-md-2 Slot Free" id="divL2S2"
+						onclick="onclickSlotc('L2S2')">S2</div>
+					<div class="col-md-2 Slot Free" id="divL2S3"
+						onclick="onclickSlotc('L2S3')">S3</div>
+					<div class="col-md-2 Slot Free" id="divL2S4"
+						onclick="onclickSlotc('L2S4')">S4</div>
+					<div class="col-md-2 Slot Free" id="divL2S5"
+						onclick="onclickSlotc('L2S5')">S5</div>
+					<div class="col-md-2 Slot Free" id="divL2S6"
+						onclick="onclickSlotc('L2S6')">S6</div>
+					<div class="col-md-2 Slot Free" id="divL2S7"
+						onclick="onclickSlotc('L2S7')">S7</div>
+					<div class="col-md-2 Slot Free" id="divL2S8"
+						onclick="onclickSlotc('L2S8')">S8</div>
+					<div class="col-md-2 Slot Free" id="divL2S9"
+						onclick="onclickSlotc('L2S9')">S9</div>
+					<div class="col-md-2 Slot Free" id="divL2S10"
+						onclick="onclickSlotc('L2S10')">S10</div>
+				</div>
+			</div>
+			<div>
+				<button type="button" class="btn btn-primary"
+					onclick="onclickSubmit()">Submit</button>
+				<button type="button" class="btn btn-primary" id="btnSubmit"
+					style="display: none;"></button>
+			</div>
+		</div>
 		<!-- Modal -->
 		<div class="modal fade" data-backdrop="static" id="mdlCustomerDetail"
 			role="dialog">
@@ -27,7 +107,9 @@
 								<label>Name</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idName" name="nmName">
+								<input class="form-control" type="text" id="idName"
+									name="nmName">
+								<div class="ControlErrorMessage" id="errName"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -36,6 +118,7 @@
 							</div>
 							<div class="col-xs-6">
 								<textarea class="form-control" id="idAddress" name="nmAddress"></textarea>
+								<div class="ControlErrorMessage" id="errAddress"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -43,7 +126,9 @@
 								<label>NRIC</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idNRIC" name="nmNRIC">
+								<input class="form-control" type="text" id="idNRIC"
+									name="nmNRIC">
+								<div class="ControlErrorMessage" id="errNRIC"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -59,6 +144,7 @@
 									<option value="Clothing">Clothing</option>
 									<option value="Others">Others</option>
 								</select>
+								<div class="ControlErrorMessage" id="errUserTrade"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -66,7 +152,9 @@
 								<label>Others</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idOthers" name="nmOthers">
+								<input class="form-control" type="text" id="idOthers"
+									name="nmOthers">
+								<div class="ControlErrorMessage" id="errOthers"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -74,7 +162,9 @@
 								<label>Email</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idEmail" name="nmEmail">
+								<input class="form-control" type="text" id="idEmail"
+									name="nmEmail">
+								<div class="ControlErrorMessage" id="errEmail"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -82,7 +172,9 @@
 								<label>Home</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idHomeTel" name="nmHome">
+								<input class="form-control PhoneNumber" type="text"
+									id="idHomeTel" name="nmHome" maxlength="8">
+								<div class="ControlErrorMessage" id="errHomeTel"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -90,7 +182,9 @@
 								<label>Office</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idOfficeTel" name="nmOffice">
+								<input class="form-control PhoneNumber" type="text"
+									id="idOfficeTel" name="nmOffice" maxlength="8">
+								<div class="ControlErrorMessage" id="errOfficeTel"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -98,7 +192,9 @@
 								<label>Mobile</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="text" id="idMobile" name="nmMobile">
+								<input class="form-control PhoneNumber" type="text"
+									id="idMobile" name="nmMobile" maxlength="8">
+								<div class="ControlErrorMessage" id="errMobile"></div>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -106,12 +202,16 @@
 								<label>Booking Date</label>
 							</div>
 							<div class="col-xs-6">
-								<input class="form-control" type="date" id="idBookingDate" name="nmBookingDate">
+								<input class="form-control" type="date" id="idBookingDate"
+									name="nmBookingDate">
+								<div class="ControlErrorMessage" id="errBookingDate"></div>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary">Book Slot</button>
+						<button type="button" class="btn btn-primary"
+							onclick="onclickBookSlot()">Book Slot</button>
+						<div class="ControlErrorMessage" id="errBookingSlot"></div>
 					</div>
 				</div>
 			</div>

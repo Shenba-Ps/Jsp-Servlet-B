@@ -1,0 +1,43 @@
+.Title {
+	font-size: 18px;
+	color: brown;
+	font-weight: bold;
+}
+
+.RightAlign {
+	text-align: center;
+}
+
+.ControlError {
+	border: 2px solid red;
+}
+
+.ControlErrorMessage {
+	color: red;
+	font-weight: 600;
+}
+
+.Level1 {
+	padding: 20px;
+}
+
+.Slot {
+	border: 2px solid gray;
+	margin: 5px;
+	height: 150px;
+	width: 150px;
+}
+
+.Free {
+	background-color: white;
+	color: white;
+	font-weight: 600;
+	text-align: center;
+}
+
+.Booked {
+	background-color: gray;
+	color: white;
+	font-weight: 600;
+	text-align: center;
+}

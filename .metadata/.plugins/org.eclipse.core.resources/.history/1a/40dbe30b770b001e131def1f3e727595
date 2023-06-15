@@ -1,0 +1,17 @@
+$(function() {
+
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+	OpenCustomerDetail();
+});
+
+function OpenCustomerDetail() {
+	$('#mdlCustomerDetail').modal('show');
+}
+
+function onclickBookSlot() {
+	if ($('#idName').val() == "") {
+
+	}
+}

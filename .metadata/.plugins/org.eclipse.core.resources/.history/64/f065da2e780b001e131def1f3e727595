@@ -1,0 +1,21 @@
+$(function() {
+
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+	OpenCustomerDetail();
+});
+
+function OpenCustomerDetail() {
+	$('#mdlCustomerDetail').modal('show');
+}
+
+function onclickBookSlot() {
+	$('#idName').removeClass("ControlError");
+	$('#errName').hide();
+	if ($('#idName').val() == "") {
+		$('#idName').addClass("ControlError");
+		$('#errName').html("* Please enter your name");
+		$('#errName').show();
+	}
+}

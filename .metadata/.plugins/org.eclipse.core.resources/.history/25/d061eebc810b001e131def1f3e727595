@@ -1,0 +1,84 @@
+$(function() {
+	//OpenCustomerDetail();
+});
+
+function OpenCustomerDetail() {
+	$('#mdlCustomerDetail').modal('show');
+}
+
+function onclickBookSlot() {
+	$('#idName').removeClass("ControlError");
+	$('#errName').hide();
+	$('#idAddress').removeClass("ControlError");
+	$('#errAddress').hide();
+	$('#idNRIC').removeClass("ControlError");
+	$('#errNRIC').hide();
+	$('#idUsageTrade').removeClass("ControlError");
+	$('#errUsageTrade').hide();
+	$('#idOthers').removeClass("ControlError");
+	$('#errOthers').hide();
+	$('#idEmail').removeClass("ControlError");
+	$('#errEmail').hide();
+	$('#idHomeTel').removeClass("ControlError");
+	$('#errHomeTel').hide();
+	$('#idNOfficeTel').removeClass("ControlError");
+	$('#errOfficeTel').hide();
+	$('#idMobile').removeClass("ControlError");
+	$('#errMobile').hide();
+	$('#idBookingDate').removeClass("ControlError");
+	$('#errBookingDate').hide();
+	if ($('#idName').val() == "") {
+		$('#idName').addClass("ControlError");
+		$('#errName').html("* Please enter your name");
+		$('#errName').show();
+	}
+	if ($('#idAddress').val() == "") {
+		$('#idAddress').addClass("ControlError");
+		$('#errAddress').html("* Please enter your address");
+		$('#errAddress').show();
+	}
+	if ($('#idNRIC').val() == "") {
+		$('#idNRIC').addClass("ControlError");
+		$('#errNRIC').html("* Please enter your NRIC");
+		$('#errNRIC').show();
+	}
+	if ($('#idUsageTrade').val() == "") {
+		$('#idUsageTrade').addClass("ControlError");
+		$('#errUsageTrade').html("* Please select usage trade");
+		$('#errUsageTrade').show();
+	}
+	if ($('#idOthers').val() == "") {
+		$('#idOthers').addClass("ControlError");
+		$('#errOthers').html("* Please enter usage trade details");
+		$('#errOthers').show();
+	}
+	if ($('#idEmail').val() == "") {
+		$('#idEmail').addClass("ControlError");
+		$('#errEmail').html("* Please enter your email");
+		$('#errEmail').show();
+	}
+	if ($('#idHomeTel').val() == "") {
+		$('#idHomeTel').addClass("ControlError");
+		$('#errHomeTel').html("* Please enter your home number");
+		$('#errHomeTel').show();
+	}
+	if ($('#idOfficeTel').val() == "") {
+		$('#idOfficeTel').addClass("ControlError");
+		$('#errOfficeTel').html("* Please enter your office number");
+		$('#errOfficeTel').show();
+	}
+	if ($('#idMobile').val() == "") {
+		$('#idMobile').addClass("ControlError");
+		$('#errMobile').html("* Please enter your mobile number");
+		$('#errMobile').show();
+	}
+	if ($('#idBookingDate').val() == "") {
+		$('#idBookingDate').addClass("ControlError");
+		$('#errBookingDate').html("* Please select booking date");
+		$('#errBookingDate').show();
+	}
+}
+
+function onclickSlotc(Slot){
+	
+}

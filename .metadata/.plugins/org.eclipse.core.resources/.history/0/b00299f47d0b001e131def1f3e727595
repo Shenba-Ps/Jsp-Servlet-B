@@ -1,0 +1,22 @@
+.Title {
+	font-size: 18px;
+	color: brown;
+	font-weight: bold;
+}
+
+.RightAlign {
+	text-align: center;
+}
+
+.ControlError {
+	border: 2px solid red;
+}
+
+.ControlErrorMessage {
+	color: red;
+	font-weight: 600;
+}
+
+.Slot {
+  border: 2px solid gray;	
+}
