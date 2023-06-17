@@ -52,26 +52,24 @@ public class Applicant implements Serializable{
 		private String L2s8;
 		private String L2s9;
 		private String L2s10;
-		private String noOfDaysBooked;
+		private int noOfDaysBooked;
 		private String approvalStatus;
 		private String oicComment;
 		private String oicFollowUpdateTime;
+		private int bookingMonth;
 		public Applicant() {
 			super();
+			// TODO Auto-generated constructor stub
 		}
-		public Applicant(String applicationNumber, String name, String address,
-				String nricNumber, String email, String usageTrade,
-				String usageTradeOthers, String homePhoneNumber,
-				String officePhoneNumber, String handPhoneNumber, Double totalAmount,
-				String bookingDate, String createdDate, String createdDateTime,
-				String l1s1, String l1s2, String l1s3, String l1s4, String l1s5,
-				String l1s6, String l1s7, String l1s8, String l1s9, String l1s10,
-				String l1s11, String l1s12, String l1s13, String l1s14,
-				String l1s15, String l1s16, String l1s17, String l1s18,
-				String l1s19, String l1s20, String l2s1, String l2s2, String l2s3,
-				String l2s4, String l2s5, String l2s6, String l2s7, String l2s8,
-				String l2s9, String l2s10, String noOfDaysBooked,
-				String approvalStatus, String oicComment, String oicFollowUpdateTime) {
+		public Applicant(String applicationNumber, String name, String address, String nricNumber, String email,
+				String usageTrade, String usageTradeOthers, String homePhoneNumber, String officePhoneNumber,
+				String handPhoneNumber, Double totalAmount, String bookingDate, String createdDate,
+				String createdDateTime, String l1s1, String l1s2, String l1s3, String l1s4, String l1s5, String l1s6,
+				String l1s7, String l1s8, String l1s9, String l1s10, String l1s11, String l1s12, String l1s13,
+				String l1s14, String l1s15, String l1s16, String l1s17, String l1s18, String l1s19, String l1s20,
+				String l2s1, String l2s2, String l2s3, String l2s4, String l2s5, String l2s6, String l2s7, String l2s8,
+				String l2s9, String l2s10, int noOfDaysBooked, String approvalStatus, String oicComment,
+				String oicFollowUpdateTime, int bookingMonth) {
 			super();
 			this.applicationNumber = applicationNumber;
 			this.name = name;
@@ -121,6 +119,7 @@ public class Applicant implements Serializable{
 			this.approvalStatus = approvalStatus;
 			this.oicComment = oicComment;
 			this.oicFollowUpdateTime = oicFollowUpdateTime;
+			this.bookingMonth = bookingMonth;
 		}
 		public String getApplicationNumber() {
 			return applicationNumber;
@@ -386,10 +385,10 @@ public class Applicant implements Serializable{
 		public void setL2s10(String l2s10) {
 			L2s10 = l2s10;
 		}
-		public String getNoOfDaysBooked() {
+		public int getNoOfDaysBooked() {
 			return noOfDaysBooked;
 		}
-		public void setNoOfDaysBooked(String noOfDaysBooked) {
+		public void setNoOfDaysBooked(int noOfDaysBooked) {
 			this.noOfDaysBooked = noOfDaysBooked;
 		}
 		public String getApprovalStatus() {
@@ -410,12 +409,15 @@ public class Applicant implements Serializable{
 		public void setOicFollowUpdateTime(String oicFollowUpdateTime) {
 			this.oicFollowUpdateTime = oicFollowUpdateTime;
 		}
+		public int getBookingMonth() {
+			return bookingMonth;
+		}
+		public void setBookingMonth(int bookingMonth) {
+			this.bookingMonth = bookingMonth;
+		}
 		public static long getSerialversionuid() {
 			return serialVersionUID;
 		}
-		
-		
-		
 		
 	} 
 

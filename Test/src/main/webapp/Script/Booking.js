@@ -3,7 +3,21 @@ var tempStorage = {};
 $(function() {
 	InitPage();
 
-	OpenCustomerDetail();
+	if ($('#hdnAction').val() == "null" || $('#hdnAction').val() == "") {
+		$('.InputClear').val("");
+		$('#idUsageTrade').val("F&B");
+		OpenCustomerDetail();
+	}
+
+	$("#idUsageTrade").on("change", function() {
+		var strUsageTrade = $(this).val();
+		if (strUsageTrade == "Others") {
+			$('.Others').show();
+		}
+		else {
+			$('.Others').hide();
+		}
+	})
 });
 
 function InitPage() {
@@ -60,7 +74,7 @@ function onclickBookSlot() {
 		$('#errUsageTrade').show();
 		blnError = 1;
 	}
-	if ($('#idOthers').val() == "") {
+	if ($('#idUsageTrade').val() == "Others" && $('#idOthers').val() == "") {
 		$('#idOthers').addClass("ControlError");
 		$('#errOthers').html("* Please enter usage trade details");
 		$('#errOthers').show();
@@ -96,10 +110,11 @@ function onclickBookSlot() {
 		$('#errBookingDate').show();
 		blnError = 1;
 	}
-	if(blnError == 1){
+	if (blnError == 1) {
 		return;
 	}
 	$('#mdlCustomerDetail').modal('hide');
+	$('#btnBookingSlot').click();
 }
 
 function onclickSlotc(Slot) {
@@ -123,6 +138,8 @@ function onclickSlotc(Slot) {
 	}
 
 	UpdateSlotSlection();
+
+	CalculatePrice();
 }
 
 function UpdateSlotSlection() {
@@ -140,6 +157,37 @@ function UpdateSlotSlection() {
 	}
 }
 
+function CalculatePrice() {
+	var datBookingDate = new Date($('#idBookingDate').val());
+	var arrDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	var strDayName = arrDays[datBookingDate.getDay()];
+	var decTotalPrice = 0;
+
+	var blnWeekEnd = false;
+	if (strDayName == "Saturday" || strDayName == "Sunday") {
+		blnWeekEnd = true;
+	}
+	for (i = 0; i < tempStorage.UserSlots.length; i++) {
+		var SelectedSlot = tempStorage.UserSlots[i];
+		var decPrice = 0;
+		if (SelectedSlot.indexOf("L1") >= 0) {
+			decPrice = 40;
+			if (blnWeekEnd == true) {
+				decPrice = 60;
+			}
+		}
+		else if (SelectedSlot.indexOf("L2") >= 0) {
+			decPrice = 30;
+			if (blnWeekEnd == true) {
+				decPrice = 40;
+			}
+		}
+		decTotalPrice = decTotalPrice + decPrice;
+	}
+	$('#divTotalPrice').html("$ " + decTotalPrice.toFixed(2));
+	$('#hdnTotalAmount').val(decTotalPrice);
+}
+
 function onclickSubmit() {
 	if (tempStorage.UserSlots.length < 2) {
 		alert("Please select minimum two slots");
@@ -149,6 +197,10 @@ function onclickSubmit() {
 		alert("Sorry, Maximum of seven slots allowed to select");
 		return;
 	}
-	$('#hdnSelectedSlots').val(JSON.stringify(tempStorage.UserSlots));
+	if ($('#chkAcknowledge').prop('checked') == false) {
+		alert("Please select the acknowledgement");
+		return;
+	}
+	$('#hdnSelectedSlots').val(tempStorage.UserSlots);
 	$('#btnSubmit').click();
 }
