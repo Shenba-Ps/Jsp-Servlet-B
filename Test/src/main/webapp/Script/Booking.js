@@ -21,7 +21,33 @@ $(function() {
 });
 
 function InitPage() {
+	BindUserDate();
+
+	UpdateSlotSlection();
+}
+
+function BindUserDate() {
+	tempStorage.UserBookingCountForMonth = $('#hdnUserBookingCountForMonth').val();
+
 	tempStorage.UserSlots = [];
+
+	tempStorage.UserBookedSlots = [];
+	var strUserBookingForDate = $('#hdnUserBookingForDate').val();
+	if (strUserBookingForDate != null && strUserBookingForDate != "") {
+		var arrUserBookingForDate = strUserBookingForDate.split(',');
+		for (i = 0; i < arrUserBookingForDate.length; i++) {
+			tempStorage.UserBookedSlots.push(arrUserBookingForDate[i]);
+		}
+	}
+
+	tempStorage.BookedSlots = [];
+	var strSelectedSlotByDate = $('#hdnSelectedSlotByDate').val();
+	if (strSelectedSlotByDate != null && strSelectedSlotByDate != "") {
+		var arrSelectedSlotByDate = strSelectedSlotByDate.split(',');
+		for (i = 0; i < arrSelectedSlotByDate.length; i++) {
+			tempStorage.BookedSlots.push(arrSelectedSlotByDate[i]);
+		}
+	}
 }
 
 function OpenCustomerDetail() {
@@ -122,6 +148,20 @@ function onclickSlotc(Slot) {
 		alert("Maximum slot selection reached");
 		return;
 	}
+	//Check Booked
+	var blnSlotExist = 0;
+	for (i = 0; i < tempStorage.BookedSlots.length; i++) {
+		var SelectedSlot = tempStorage.BookedSlots[i];
+		if (SelectedSlot == Slot) {
+			blnSlotExist = 1;
+			break;
+		}
+	}
+	if (blnSlotExist == true) {
+		alert("Slot not available for booking. Please select another slot");
+		return;
+	}
+
 	var blnSlotExist = 0;
 	for (i = 0; i < tempStorage.UserSlots.length; i++) {
 		var SelectedSlot = tempStorage.UserSlots[i];
@@ -144,16 +184,27 @@ function onclickSlotc(Slot) {
 
 function UpdateSlotSlection() {
 	for (i = 1; i <= 20; i++) {
+		$('#divL1S' + i).removeClass("Blocked");
 		$('#divL1S' + i).removeClass("Booked");
+		$('#divL1S' + i).removeClass("BookedByUser");
 		$('#divL1S' + i).addClass("Free");
 		if (i <= 10) {
 			$('#divL2S' + i).removeClass("Booked");
 			$('#divL2S' + i).addClass("Free");
 		}
 	}
+	for (i = 0; i < tempStorage.BookedSlots.length; i++) {
+		var SelectedSlot = tempStorage.BookedSlots[i];
+		$('#div' + SelectedSlot).addClass("Blocked");
+	}
 	for (i = 0; i < tempStorage.UserSlots.length; i++) {
 		var SelectedSlot = tempStorage.UserSlots[i];
 		$('#div' + SelectedSlot).addClass("Booked");
+	}
+	for (i = 0; i < tempStorage.UserBookedSlots.length; i++) {
+		var SelectedSlot = tempStorage.UserBookedSlots[i];
+		$('#div' + SelectedSlot).removeClass("Blocked");
+		$('#div' + SelectedSlot).addClass("BookedByUser");
 	}
 }
 
@@ -193,7 +244,8 @@ function onclickSubmit() {
 		alert("Please select minimum two slots");
 		return;
 	}
-	if (tempStorage.UserSlots.length > 7) {
+	var UserSelectionPerMonth = tempStorage.UserSlots.length + parseInt(tempStorage.UserBookingCountForMonth);
+	if (UserSelectionPerMonth > 7) {
 		alert("Sorry, Maximum of seven slots allowed to select");
 		return;
 	}

@@ -3,7 +3,6 @@ package com.test.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -60,6 +59,7 @@ public class ApplicantServlet extends HttpServlet {
 
 			e.printStackTrace();
 		}
+		java.sql.Date convBookingDate = new java.sql.Date(datBookingDate.getTime());
 		int intMonth = datBookingDate.getMonth();
 
 		applicantObj.setName(request.getParameter("nmName"));
@@ -73,6 +73,8 @@ public class ApplicantServlet extends HttpServlet {
 		applicantObj.setHandPhoneNumber(request.getParameter("nmMobile"));
 		applicantObj.setTotalAmount(Double.valueOf("0"));
 		applicantObj.setBookingDate(request.getParameter("nmBookingDate"));
+		applicantObj.setSlectedSlots(strUserSelectedSlots);
+		System.out.println(applicantObj.getBookingDate());
 		applicantObj.setBookingMonth(intMonth);
 		if (url.equals("/saveBooking")) {
 			applicantObj.setL1s1("0");
@@ -172,17 +174,40 @@ public class ApplicantServlet extends HttpServlet {
 				}
 			}
 			applicantObj.setNoOfDaysBooked(intUSCount);
-			// applicantObj.setApprovalStatus("0");
 			applicantObj.setOicComment("0");
-			// applicantObj.setOicFollowUpdateTime("0");
-			// ApplicantService app = new ApplicantService();
 			applicantService.saveBookingDetailService(applicantObj);
-			response.sendRedirect("");
+			response.sendRedirect("Booking.jsp");
 		} else if (url.equals("/list")) {
-			List<Applicant> listBooking = applicantDao.getAllBookingList();
-			long count = applicantDao.getBookingListOfCurrentMonthByNric(intMonth,applicantObj.getNricNumber() );
-			request.setAttribute("listBooking", listBooking);
-			request.setAttribute("atrcountOfBooking", count);
+			// List<Applicant> listAllBooking = applicantDao.getAllBookingList();
+			// List<Applicant> listOfBookingMonth =
+			// applicantDao.getAllListOfBookingMonth(intMonth);
+			long intUserBookingCountForMonth = applicantDao.getBookingListOfCurrentMonthByNric(intMonth,
+					applicantObj.getNricNumber());
+			List<Applicant> listOfUserByBookingDate = applicantDao.getListOfUserByBookingDate(convBookingDate,
+					applicantObj.getNricNumber());
+			List<Applicant> listOfBookingDate = applicantDao.getListOfBookingDate(convBookingDate);
+			int count = applicantDao.getBookingCountOfMonth(intMonth, applicantObj.getNricNumber());
+			System.out.println(count);
+
+			String strUserSelectedSlotByDate = null;
+			for (Applicant app : listOfUserByBookingDate) {
+				if (app.getSlectedSlots() != null) {
+					if (strUserSelectedSlotByDate != "") {
+						strUserSelectedSlotByDate += ",";
+					}
+					strUserSelectedSlotByDate += app.getSlectedSlots();
+				}
+			}
+			String strSelectedSlotByDate = null;
+			for (Applicant app : listOfBookingDate) {
+				if (app.getSlectedSlots() != null) {
+					if (strSelectedSlotByDate != "") {
+						strSelectedSlotByDate += ",";
+					}
+					strSelectedSlotByDate += app.getSlectedSlots();
+				}
+			}
+
 			request.setAttribute("hdnAction", "Book Slot");
 			request.setAttribute("atrName", request.getParameter("nmName"));
 			request.setAttribute("atrAddress", request.getParameter("nmAddress"));
@@ -194,10 +219,11 @@ public class ApplicantServlet extends HttpServlet {
 			request.setAttribute("atrOffice", request.getParameter("nmOffice"));
 			request.setAttribute("atrMobile", request.getParameter("nmMobile"));
 			request.setAttribute("atrBookingDate", request.getParameter("nmBookingDate"));
+			request.setAttribute("atrUserBookingCountForMonth", count);
+			request.setAttribute("atrUserBookingForDate", strUserSelectedSlotByDate);
+			request.setAttribute("atrSelectedSlotByDate", strSelectedSlotByDate);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Booking.jsp");
 			dispatcher.forward(request, response);
 		}
-
 	}
-
 }

@@ -18,7 +18,13 @@
 					value=""> <input type="hidden" id="hdnTotalAmount"
 					name="nmTotalAmount" value=""> <input type="hidden"
 					id="hdnAction" name="nmAction"
-					value="<%=request.getAttribute("hdnAction")%>">
+					value="<%=request.getAttribute("hdnAction")%>"><input type="hidden"
+					id="hdnUserBookingCountForMonth" name="hdnUserBookingCountForMonth"
+					value="<%=request.getAttribute("atrUserBookingCountForMonth")%>"><input type="hidden"
+					id="hdnUserBookingForDate" name="hdnUserBookingForDate"
+					value="<%=request.getAttribute("atrUserBookingForDate")%>"><input type="hidden"
+					id="hdnSelectedSlotByDate" name="hdnSelectedSlotByDate"
+					value="<%=request.getAttribute("atrSelectedSlotByDate")%>">
 				<div class="Level form-group">
 					<div class="form-group" onClick="OpenCustomerDetail()"
 						style="font-style: underline; color: blue;">Edit Customer

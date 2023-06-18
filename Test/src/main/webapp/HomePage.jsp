@@ -17,6 +17,10 @@
 				onclick="NavigatePage('Booking')">Booking</button>
 			<button type="button" class="btn btn-danger"
 				onclick="NavigatePage('Approval')">Approval</button>
+				<form method="post" action="<%=request.getContextPath()%>/pendingList">
+				<button type="submit" >Test</button>
+				<button type="submit" formaction="<%=request.getContextPath()%>/report">Test Report</button>
+				</form>
 			<button type="button" class="btn btn-warning"
 				onclick="NavigatePage('Report')">Report</button>
 		</div>

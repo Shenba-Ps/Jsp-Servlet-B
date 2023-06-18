@@ -57,6 +57,7 @@ public class Applicant implements Serializable{
 		private String oicComment;
 		private String oicFollowUpdateTime;
 		private int bookingMonth;
+		private String slectedSlots;
 		public Applicant() {
 			super();
 			// TODO Auto-generated constructor stub
@@ -69,7 +70,7 @@ public class Applicant implements Serializable{
 				String l1s14, String l1s15, String l1s16, String l1s17, String l1s18, String l1s19, String l1s20,
 				String l2s1, String l2s2, String l2s3, String l2s4, String l2s5, String l2s6, String l2s7, String l2s8,
 				String l2s9, String l2s10, int noOfDaysBooked, String approvalStatus, String oicComment,
-				String oicFollowUpdateTime, int bookingMonth) {
+				String oicFollowUpdateTime, int bookingMonth, String slectedSlots) {
 			super();
 			this.applicationNumber = applicationNumber;
 			this.name = name;
@@ -120,6 +121,7 @@ public class Applicant implements Serializable{
 			this.oicComment = oicComment;
 			this.oicFollowUpdateTime = oicFollowUpdateTime;
 			this.bookingMonth = bookingMonth;
+			this.slectedSlots = slectedSlots;
 		}
 		public String getApplicationNumber() {
 			return applicationNumber;
@@ -414,6 +416,12 @@ public class Applicant implements Serializable{
 		}
 		public void setBookingMonth(int bookingMonth) {
 			this.bookingMonth = bookingMonth;
+		}
+		public String getSlectedSlots() {
+			return slectedSlots;
+		}
+		public void setSlectedSlots(String slectedSlots) {
+			this.slectedSlots = slectedSlots;
 		}
 		public static long getSerialversionuid() {
 			return serialVersionUID;

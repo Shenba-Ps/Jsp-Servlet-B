@@ -43,3 +43,38 @@
 	font-weight: 600;
 	text-align: center;
 }
+
+.BookedByUser {
+	background-color: green;
+	color: white;
+	font-weight: 600;
+	text-align: center;
+}
+
+.Blocked {
+	background-color: gray;
+	color: white;
+	font-weight: 600;
+	text-align: center;
+}
+
+.ListHeaderRow {
+	border: 2px solid black;
+}
+
+.ListHeaderCol {
+	color: Blue;
+	border: 2px solid black;
+	width: 200px;
+	text-align: center;
+}
+
+.ListBodyRow {
+	border: 2px solid black;
+}
+
+.ListBodyCol {
+	border: 2px solid black;
+	width: 200px;
+	text-align: Left;
+}
