@@ -27,14 +27,14 @@ CREATE TABLE app.space_booking ( application_id VARCHAR(100) NOT NULL,
 				PRIMARY KEY (application_id));
 		
 		
-	CREATE TABLE `space_booking` (
+CREATE TABLE `space_booking` (
   `application_number` varchar(100) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
   `nric_number` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  usage_trade varchar(50) DEFAULT NULL,
-  usage_trade_others varchar(50) DEFAULT NULL,
+  `usage_trade` varchar(50) DEFAULT NULL,
+  `usage_trade_others` varchar(50) DEFAULT NULL,
   `home_ph_no` varchar(10) DEFAULT NULL,
   `office_ph_no` varchar(10) DEFAULT NULL,
   `hand_ph_no` varchar(10) DEFAULT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE app.space_booking ( application_id VARCHAR(100) NOT NULL,
   `no_of_days_booked` int DEFAULT NULL,
   `approval_status` varchar(20) DEFAULT NULL,
   `oic_comment` varchar(1000) DEFAULT NULL,
-  `oic_followup_date_time` timestamp NULL DEFAULT NULL,
+  `oic_followup_date_time` date DEFAULT NULL,
   `booking_month` int DEFAULT NULL,
   `created_date` date DEFAULT NULL,
   `created_date_time` timestamp NULL DEFAULT NULL,
