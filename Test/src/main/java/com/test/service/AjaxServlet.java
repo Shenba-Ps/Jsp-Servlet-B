@@ -235,4 +235,4 @@ public class AjaxServlet extends HttpServlet {
 		response.getWriter().write(objResponseData.toString());
 	}
 
-}
+},
