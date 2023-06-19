@@ -18,12 +18,15 @@
 					value=""> <input type="hidden" id="hdnTotalAmount"
 					name="nmTotalAmount" value=""> <input type="hidden"
 					id="hdnAction" name="nmAction"
-					value="<%=request.getAttribute("hdnAction")%>"><input type="hidden"
-					id="hdnUserBookingCountForMonth" name="hdnUserBookingCountForMonth"
-					value="<%=request.getAttribute("atrUserBookingCountForMonth")%>"><input type="hidden"
-					id="hdnUserBookingForDate" name="hdnUserBookingForDate"
-					value="<%=request.getAttribute("atrUserBookingForDate")%>"><input type="hidden"
-					id="hdnSelectedSlotByDate" name="hdnSelectedSlotByDate"
+					value="<%=request.getAttribute("hdnAction")%>"><input
+					type="hidden" id="hdnUserBookingCountForMonth"
+					name="hdnUserBookingCountForMonth"
+					value="<%=request.getAttribute("atrUserBookingCountForMonth")%>"><input
+					type="hidden" id="hdnUserBookingForDate"
+					name="hdnUserBookingForDate"
+					value="<%=request.getAttribute("atrUserBookingForDate")%>"><input
+					type="hidden" id="hdnSelectedSlotByDate"
+					name="hdnSelectedSlotByDate"
 					value="<%=request.getAttribute("atrSelectedSlotByDate")%>">
 				<div class="Level form-group">
 					<div class="form-group" onClick="OpenCustomerDetail()"
@@ -113,7 +116,8 @@
 						<button type="button" class="btn btn-warning"
 							onclick="onclickSubmit()">Submit</button>
 						<button type="submit" class="btn btn-warning" id="btnSubmit"
-							formaction="<%=request.getContextPath() %>/saveBooking" style="display: none;"></button>
+							formaction="<%=request.getContextPath()%>/saveBooking"
+							style="display: none;"></button>
 					</div>
 				</div>
 			</div>
@@ -132,7 +136,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control InputClear" type="text" id="idName"
-										name="nmName" value="<%=request.getAttribute("atrName")%>">
+										name="nmName" value="">
 									<div class="ControlErrorMessage" id="errName"></div>
 								</div>
 							</div>
@@ -141,7 +145,8 @@
 									<label>Address</label>
 								</div>
 								<div class="col-xs-6">
-									<textarea class="form-control InputClear" id="idAddress" name="nmAddress"><%=request.getAttribute("atrAddress")%></textarea>
+									<textarea class="form-control InputClear" id="idAddress"
+										name="nmAddress"></textarea>
 									<div class="ControlErrorMessage" id="errAddress"></div>
 								</div>
 							</div>
@@ -151,7 +156,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control InputClear" type="text" id="idNRIC"
-										name="nmNRIC" value="<%=request.getAttribute("atrNRIC")%>">
+										name="nmNRIC" value="">
 									<div class="ControlErrorMessage" id="errNRIC"></div>
 								</div>
 							</div>
@@ -161,10 +166,10 @@
 								</div>
 								<div class="col-xs-6">
 									<select class="form-control" name="UsageTrade"
-										id="idUsageTrade" value="<%=request.getAttribute("atrUsageTrade")%>">
+										id="idUsageTrade" value="">
 										<option value="Credit Card Promotion">Credit Card
 											Promotion</option>
-										<option value="F&B">F&B</option>
+										<option value="FB">F&B</option>
 										<option value="Hairdressing">Hairdressing</option>
 										<option value="Clothing">Clothing</option>
 										<option value="Others">Others</option>
@@ -177,8 +182,9 @@
 									<label>Others</label>
 								</div>
 								<div class="col-xs-6">
-									<input class="form-control InputClear" type="text" id="idOthers"
-										name="nmOthers" value="<%=request.getAttribute("atrOthers")%>">
+									<input class="form-control InputClear" type="text"
+										id="idOthers" name="nmOthers"
+										value="<%=request.getAttribute("atrOthers")%>">
 									<div class="ControlErrorMessage" id="errOthers"></div>
 								</div>
 							</div>
@@ -188,7 +194,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control InputClear" type="text" id="idEmail"
-										name="nmEmail" value="<%=request.getAttribute("atrEmail")%>">
+										name="nmEmail" value="">
 									<div class="ControlErrorMessage" id="errEmail"></div>
 								</div>
 							</div>
@@ -198,7 +204,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control PhoneNumber InputClear" type="text"
-										id="idHomeTel" name="nmHome" maxlength="8" value="<%=request.getAttribute("atrHome")%>">
+										id="idHomeTel" name="nmHome" maxlength="8" value="">
 									<div class="ControlErrorMessage" id="errHomeTel"></div>
 								</div>
 							</div>
@@ -208,8 +214,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control PhoneNumber InputClear" type="text"
-										id="idOfficeTel" name="nmOffice" maxlength="8"
-										value="<%=request.getAttribute("atrOffice")%>">
+										id="idOfficeTel" name="nmOffice" maxlength="8" value="">
 									<div class="ControlErrorMessage" id="errOfficeTel"></div>
 								</div>
 							</div>
@@ -219,7 +224,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control PhoneNumber InputClear" type="text"
-										id="idMobile" name="nmMobile" maxlength="8" value="<%=request.getAttribute("atrMobile")%>">
+										id="idMobile" name="nmMobile" maxlength="8" value="">
 									<div class="ControlErrorMessage" id="errMobile"></div>
 								</div>
 							</div>
@@ -228,8 +233,8 @@
 									<label>Booking Date</label>
 								</div>
 								<div class="col-xs-6">
-									<input class="form-control InputClear" type="date" id="idBookingDate"
-										name="nmBookingDate" value="<%=request.getAttribute("atrBookingDate")%>">
+									<input class="form-control InputClear" type="date"
+										id="idBookingDate" name="nmBookingDate" value="">
 									<div class="ControlErrorMessage" id="errBookingDate"></div>
 								</div>
 							</div>

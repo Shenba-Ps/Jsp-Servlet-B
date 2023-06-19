@@ -3,12 +3,6 @@ var tempStorage = {};
 $(function() {
 	InitPage();
 
-	if ($('#hdnAction').val() == "null" || $('#hdnAction').val() == "") {
-		$('.InputClear').val("");
-		$('#idUsageTrade').val("F&B");
-		OpenCustomerDetail();
-	}
-
 	$("#idUsageTrade").on("change", function() {
 		var strUsageTrade = $(this).val();
 		if (strUsageTrade == "Others") {
@@ -21,18 +15,27 @@ $(function() {
 });
 
 function InitPage() {
+	$('#idUsageTrade').val("FB");
+	OpenCustomerDetail();
+
+	tempStorage.SlotsInfo = {};
+
+	InitSlots();
+}
+
+function InitSlots() {
 	BindUserDate();
 
 	UpdateSlotSlection();
 }
 
 function BindUserDate() {
-	tempStorage.UserBookingCountForMonth = $('#hdnUserBookingCountForMonth').val();
+	tempStorage.UserBookingCountForMonth = tempStorage.SlotsInfo.UserBookingCountForMonth;
 
 	tempStorage.UserSlots = [];
 
 	tempStorage.UserBookedSlots = [];
-	var strUserBookingForDate = $('#hdnUserBookingForDate').val();
+	var strUserBookingForDate = tempStorage.SlotsInfo.UserBookingForDate;
 	if (strUserBookingForDate != null && strUserBookingForDate != "") {
 		var arrUserBookingForDate = strUserBookingForDate.split(',');
 		for (i = 0; i < arrUserBookingForDate.length; i++) {
@@ -41,7 +44,7 @@ function BindUserDate() {
 	}
 
 	tempStorage.BookedSlots = [];
-	var strSelectedSlotByDate = $('#hdnSelectedSlotByDate').val();
+	var strSelectedSlotByDate = tempStorage.SlotsInfo.SelectedSlotByDate;
 	if (strSelectedSlotByDate != null && strSelectedSlotByDate != "") {
 		var arrSelectedSlotByDate = strSelectedSlotByDate.split(',');
 		for (i = 0; i < arrSelectedSlotByDate.length; i++) {
@@ -140,7 +143,8 @@ function onclickBookSlot() {
 		return;
 	}
 	$('#mdlCustomerDetail').modal('hide');
-	$('#btnBookingSlot').click();
+	//$('#btnBookingSlot').click();
+	BookSlot("Book Slot");
 }
 
 function onclickSlotc(Slot) {
@@ -254,5 +258,75 @@ function onclickSubmit() {
 		return;
 	}
 	$('#hdnSelectedSlots').val(tempStorage.UserSlots);
-	$('#btnSubmit').click();
+	//$('#btnSubmit').click();
+	Submit();
+}
+
+
+function BookSlot(Action) {
+	var strDate = "";
+	if (Action == "Book Slot") {
+		strDate = $('#idBookingDate').val();
+	}
+	var Param = {};
+	Param.Action = "Fetch Slots";
+	Param.Date = strDate;
+	Param.NRIC = $('#idNRIC').val();
+	$.ajax({
+		url: '/Test/AjaxServlet',
+		type: "POST",
+		data: 'BodyData=' + JSON.stringify(Param),
+		success: function(response) {
+			var objResponse = response;
+			tempStorage.SlotsInfo.UserBookingCountForMonth = objResponse.UserBookingCountForMonth;
+			tempStorage.SlotsInfo.UserBookingForDate = objResponse.UserBookingForDate;
+			tempStorage.SlotsInfo.SelectedSlotByDate = objResponse.SelectedSlotByDate;
+			InitSlots();
+		},
+		error: function(errorMessage) {
+			alert("Ajax error");
+		}
+	});
+}
+
+function Submit() {
+	var Param = {};
+	Param.Action = "Save Slots";
+	Param.Name = $('#idName').val();
+	Param.Address = $('#idAddress').val();
+	Param.NRIC = $('#idNRIC').val();
+	Param.UsageTrade = $('#idUsageTrade').val();
+	Param.Others = $('#idOthers').val();
+	Param.Email = $('#idEmail').val();
+	Param.HomeTel = $('#idHomeTel').val();
+	Param.OfficeTel = $('#idOfficeTel').val();
+	Param.Mobile = $('#idMobile').val();
+	Param.TotalAmount = $('#idMobile').val();
+	Param.BookingData = [];
+	var BookingData = {};
+	BookingData.BookingDate = $('#idBookingDate').val();
+	var UserSlots = "";
+	for (i = 0; i < tempStorage.UserSlots.length; i++) {
+		if (UserSlots != "") {
+			UserSlots += ",";
+		}
+		UserSlots += tempStorage.UserSlots[i];
+	}
+	BookingData.BookingSlot = UserSlots;
+	Param.BookingData.push(BookingData);
+	var BookingData = {};
+	BookingData.BookingDate = "2023-06-19";
+	BookingData.BookingSlot = "L2S1,L2S2";
+	Param.BookingData.push(BookingData);
+	$.ajax({
+		url: '/Test/AjaxServlet',
+		type: "POST",
+		data: 'BodyData=' + JSON.stringify(Param),
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(errorMessage) {
+			alert("Ajax error");
+		}
+	});
 }
