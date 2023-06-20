@@ -53,7 +53,7 @@ public class AjaxServlet extends HttpServlet {
 		String strBodyData = request.getParameter("BodyData");
 		JSONObject objBodyData = new JSONObject(strBodyData);
 		String strAction = objConvertJSON.CJSON_S(objBodyData, "Action").toString();
-	 if (strAction.equals("Save Slots")) {
+		if (strAction.equals("Save Slots")) {
 			JSONArray jaBookingList = objBodyData.getJSONArray("BookingData");
 
 			for (int i = 0; i < jaBookingList.length(); i++) {
@@ -81,7 +81,7 @@ public class AjaxServlet extends HttpServlet {
 				int intMonth = datBookingDate.getMonth();
 				applicantObj.setBookingDate(convBookingDate.toString());
 				applicantObj.setBookingMonth(intMonth);
-				//Slots
+				// Slots
 				applicantObj.setL1s1("0");
 				applicantObj.setL1s2("0");
 				applicantObj.setL1s3("0");
@@ -185,7 +185,7 @@ public class AjaxServlet extends HttpServlet {
 				applicantObj.setOicComment("0");
 				applicantService.saveBookingDetailService(applicantObj);
 			}
-		}else if (strAction.equals("Fetch Slots")) {
+		} else if (strAction.equals("Fetch Slots")) {
 			applicantObj.setNricNumber(objConvertJSON.CJSON_S(objBodyData, "NRIC"));
 			String strBookingDate = objConvertJSON.CJSON_S(objBodyData, "Date").toString();
 			Date datBookingDate = null;
@@ -204,6 +204,9 @@ public class AjaxServlet extends HttpServlet {
 			List<Applicant> listOfBookingDate = applicantDao.getListOfBookingDate(convBookingDate);
 			int intUserBookingCountForMonth = applicantDao.getBookingCountOfMonth(intMonth,
 					applicantObj.getNricNumber());
+			int intUserBookingTimesForMonth = applicantDao.getBookingCountByNric(intMonth,
+					applicantObj.getNricNumber());
+			List<String> bookingDateArray = applicantDao.getListOfBookingdate(applicantObj.getNricNumber());
 			System.out.println(intUserBookingCountForMonth);
 
 			String strUserSelectedSlotByDate = "";
@@ -225,14 +228,18 @@ public class AjaxServlet extends HttpServlet {
 				}
 			}
 
+
 			objResponseData.put("UserBookingCountForMonth", intUserBookingCountForMonth);
+			objResponseData.put("UserBookingTimesForMonth", intUserBookingTimesForMonth);
 			objResponseData.put("UserBookingForDate", strUserSelectedSlotByDate);
 			objResponseData.put("SelectedSlotByDate", strSelectedSlotByDate);
+			objResponseData.put("LastFourBookingDates", bookingDateArray);
 		}
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
+		System.out.println("objResponseData.toString() :: "+objResponseData.toString());
 		response.getWriter().write(objResponseData.toString());
 	}
 
-},
+}

@@ -1,23 +1,24 @@
 <!DOCTYPE HTML><%@page language="java"
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-	<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <title>Booking Report</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="Plugins/Boostrap.css">
+<link rel="stylesheet" href="Plugins/jquery.dataTables.css">
 <script src="Plugins/jQuery.js"></script>
 <script src="Plugins/bootstrap.js"></script>
 <script src="Script/BookingReport.js"></script>
+<script src="Plugins/jquery.dataTables.js"></script>
 </head>
 <body>
-	<div style="height: 97vh; background-color: #4169E1;">
+	<div style="height: 97vh; background-color: white;">
 		<div>Report</div>
-		
-		<table>
+		<table id="tblList">
 			<thead>
 				<tr class="ListHeaderRow">
-					<th class="ListHeaderCol" style="width:200px;">Application.NO</th>
+					<th class="ListHeaderCol" style="width: 200px;">Application.NO</th>
 					<th class="ListHeaderCol">Name of Applicant</th>
 					<th class="ListHeaderCol">Trade Description</th>
 					<th class="ListHeaderCol">Total Days booked</th>
@@ -34,23 +35,25 @@
 
 					<tr class="ListBodyRow">
 
-						<td class="ListBodyCol" style="width:200px;"><c:out
+						<td class="ListBodyCol" style="width: 200px;"><c:out
 								value="${bookingList.applicationNumber}" /></td>
 
 						<td class="ListBodyCol"><c:out value="${bookingList.name}" /></td>
-						<td class="ListBodyCol"><c:out value="${bookingList.usageTrade}" /></td>
+						<td class="ListBodyCol"><c:out
+								value="${bookingList.usageTrade}" /></td>
 						<td class="ListBodyCol"><c:out
 								value="${bookingList.noOfDaysBooked}" /></td>
 						<td class="ListBodyCol"><c:out
 								value="${bookingList.bookingDate}" /></td>
-						<td class="ListBodyCol"><c:out value="${bookingList.approvalStatus}" /></td>
+						<td class="ListBodyCol"><c:out
+								value="${bookingList.approvalStatus}" /></td>
 						<td class="ListBodyCol"><c:out
 								value="${bookingList.createdDate}" /></td>
 						<td class="ListBodyCol"><c:out
 								value="${bookingList.oicFollowUpdateTime}" /></td>
-					
 
-					
+
+
 					</tr>
 
 				</c:forEach>
@@ -83,4 +86,11 @@
 		</table>
 	</div>
 </body>
+<script>
+	$(function() {
+		let table = new DataTable('#tblList', {
+		//config options...
+		});
+	});
+</script>
 </html>

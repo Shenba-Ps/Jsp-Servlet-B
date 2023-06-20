@@ -156,7 +156,7 @@
 								</div>
 								<div class="col-xs-6">
 									<input class="form-control InputClear" type="text" id="idNRIC"
-										name="nmNRIC" value="">
+										name="nmNRIC" value="" maxlength="9">
 									<div class="ControlErrorMessage" id="errNRIC"></div>
 								</div>
 							</div>
@@ -203,7 +203,7 @@
 									<label>Home</label>
 								</div>
 								<div class="col-xs-6">
-									<input class="form-control PhoneNumber InputClear" type="text"
+									<input class="form-control LandlineNumber InputClear" type="text"
 										id="idHomeTel" name="nmHome" maxlength="8" value="">
 									<div class="ControlErrorMessage" id="errHomeTel"></div>
 								</div>

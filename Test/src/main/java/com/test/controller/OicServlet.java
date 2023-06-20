@@ -32,7 +32,6 @@ public class OicServlet extends HttpServlet {
        
     }
 
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -40,11 +39,13 @@ public class OicServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	    System.out.println("Hi");
 		String url = request.getServletPath();
-		
+		System.out.println("url"+url);
 		String status = "In-Progress";
-		
+		String appNo1 = request.getParameter("appInput");
+		System.out.println("----------"+appNo1);
 		if(url.equals("/pendingList")) {
 		
 		try {
@@ -70,7 +71,22 @@ public class OicServlet extends HttpServlet {
 			}
 		}
 		else if(url.equals("/approval")) {
-			
+			System.out.println("----------------appno----------------------");
+			String appNo = request.getParameter("appInput");
+			System.out.println(appNo);
+			try {
+				Applicant applicant = applicantDao.getApplicationById(appNo);
+				oicService.updateStatus(applicant);
+				List<Applicant> pendingStatusList = oicDao.getApplicationByApprovalStatus(status);
+				request.setAttribute("pendingStatusList", pendingStatusList);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("BookingApproval.jsp");
+				dispatcher.forward(request, response);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(url.equals("/report")) {
 			 int page = 1;

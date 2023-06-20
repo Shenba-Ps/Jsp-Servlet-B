@@ -364,7 +364,7 @@ public class ApplicantDao {
 				ap.setEmail(resultSet.getString("email"));
 				ap.setTotalAmount(resultSet.getDouble("total_amount"));
 				ap.setBookingDate(resultSet.getString("booking_date"));
-				ap.setUsageTrade(resultSet.getString("user_trade"));
+				ap.setUsageTrade(resultSet.getString("usage_trade"));
 				ap.setUsageTradeOthers(resultSet.getString("usage_trade_others"));
 				ap.setL1s1(resultSet.getString("L1s1"));
 				ap.setL1s2(resultSet.getString("L1s2"));
@@ -816,4 +816,65 @@ public class ApplicantDao {
 		return count;
 	}
 
+
+	public int getBookingCountByNric(int month, String nricNumber) {
+		int count = 0;
+		String selectQuery = "select count(*) from space_booking where booking_month = ? and nric_number = ?";
+		try {
+			connection = new DbConnection().getConnection();
+			preparedStatement = connection.prepareStatement(selectQuery);
+			preparedStatement.setInt(1, month);
+			preparedStatement.setString(2, nricNumber);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				
+					count = resultSet.getInt(1);
+					System.out.println(count);
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				preparedStatement.close();
+				resultSet.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return count;
+	}
+	
+	public List<String> getListOfBookingdate(String nricNumber) {
+		List<String> listApplicant = new ArrayList<>();
+		String selectQuery = "select distinct booking_date from space_booking where nric_number = ?";
+		try {
+			connection = new DbConnection().getConnection();
+			preparedStatement = connection.prepareStatement(selectQuery);
+			preparedStatement.setString(1, nricNumber);
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+			
+				listApplicant.add(resultSet.getString("booking_date"))	;
+		        listApplicant.toArray();
+			System.out.println(resultSet.getString("booking_date"));
+			
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				preparedStatement.close();
+				resultSet.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+	
+		return listApplicant;
+	}
 }

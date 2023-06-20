@@ -12,13 +12,37 @@ $(function() {
 			$('.Others').hide();
 		}
 	})
+
+	$('.PhoneNumber').keyup(function() {
+		var inpValue = $(this).val();
+		var pattern = /^[0-9]*$/i
+		if (inpValue.length == 1 && inpValue != 8 && inpValue != 9) {
+			$(this).val("");
+		}
+		else if (!pattern.test(inpValue)) {
+			$(this).val("");
+		}
+	});
+
+
+	$('.LandlineNumber').keyup(function() {
+		var inpValue = $(this).val();
+		var pattern = /^[0-9]*$/i
+		if (inpValue.length == 1 && inpValue != 6) {
+			$(this).val("");
+		}
+		else if (!pattern.test(inpValue)) {
+			$(this).val("");
+		}
+	});
 });
 
 function InitPage() {
+	tempStorage.SlotsInfo = {};
+	tempStorage.UserSlots = [];
+
 	$('#idUsageTrade').val("FB");
 	OpenCustomerDetail();
-
-	tempStorage.SlotsInfo = {};
 
 	InitSlots();
 }
@@ -32,7 +56,6 @@ function InitSlots() {
 function BindUserDate() {
 	tempStorage.UserBookingCountForMonth = tempStorage.SlotsInfo.UserBookingCountForMonth;
 
-	tempStorage.UserSlots = [];
 
 	tempStorage.UserBookedSlots = [];
 	var strUserBookingForDate = tempStorage.SlotsInfo.UserBookingForDate;
@@ -54,6 +77,10 @@ function BindUserDate() {
 }
 
 function OpenCustomerDetail() {
+	$('#idNRIC').removeAttr("disabled");
+	if (tempStorage.UserSlots.length > 0) {
+		$('#idNRIC').attr("disabled", true);
+	}
 	$('#mdlCustomerDetail').modal('show');
 }
 
@@ -91,6 +118,15 @@ function onclickBookSlot() {
 		$('#errAddress').show();
 		blnError = 1;
 	}
+	else {
+		var pattern = /^[a-z A-Z0-9_]*$/i;
+		if (!pattern.test($('#idAddress').val())) {
+			$('#idAddress').addClass("ControlError");
+			$('#errAddress').html("* Invalid address");
+			$('#errAddress').show();
+			blnError = 1;
+		}
+	}
 	if ($('#idNRIC').val() == "") {
 		$('#idNRIC').addClass("ControlError");
 		$('#errNRIC').html("* Please enter your NRIC");
@@ -114,6 +150,15 @@ function onclickBookSlot() {
 		$('#errEmail').html("* Please enter your email");
 		$('#errEmail').show();
 		blnError = 1;
+	}
+	else {
+		var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+		if (!pattern.test($('#idEmail').val())) {
+			$('#idEmail').addClass("ControlError");
+			$('#errEmail').html("* Invalid email address");
+			$('#errEmail').show();
+			blnError = 1;
+		}
 	}
 	if ($('#idHomeTel').val() == "") {
 		$('#idHomeTel').addClass("ControlError");
@@ -142,16 +187,70 @@ function onclickBookSlot() {
 	if (blnError == 1) {
 		return;
 	}
-	$('#mdlCustomerDetail').modal('hide');
 	//$('#btnBookingSlot').click();
+	tempStorage.SelectedDate = $('#idBookingDate').val();
+
 	BookSlot("Book Slot");
 }
 
-function onclickSlotc(Slot) {
-	if (tempStorage.UserSlots.length >= 7) {
-		alert("Maximum slot selection reached");
-		return;
+function ValidateBackToBack() {
+	var BookingDate = new Date(tempStorage.SelectedDate);
+	var ServerDates = tempStorage.SlotsInfo.LastFourBookingDates;
+
+	for (i = 0; i < tempStorage.UserSlots.length; i++) {
+		var SelectedDate = tempStorage.UserSlots[i]["Selected_Date"];
+		var blnMatch = false;
+		for (j = 0; j < ServerDates.length; j++) {
+			if (ServerDates[j] == SelectedDate) {
+				blnMatch = true;
+			}
+		}
+		if (blnMatch) {
+			continue;
+		}
+		else {
+			ServerDates.push(SelectedDate);
+		}
 	}
+
+	var blnValid = false;
+	var PreviousDate = new Date();
+	PreviousDate.setDate(BookingDate.getDate() - 1);
+	var BackToBackCount = 0;
+	while (blnValid == false) {
+		var PreviousDay = PreviousDate.getDate();
+		var blnMatch = false;
+		for (var i = 0; i < ServerDates.length; i++) {
+			var CurrentDate = new Date(ServerDates[i]);
+			var CurrentDateDay = CurrentDate.getDate();
+			if (CurrentDateDay == PreviousDay) {
+				blnMatch = true;
+			}
+		}
+		if (blnMatch == false) {
+			blnValid = true;
+		}
+		else {
+			if (BackToBackCount >= 4) {
+				blnValid = true;
+			}
+			else {
+				BackToBackCount++;
+				PreviousDate.setDate(PreviousDate.getDate() - 1);
+			}
+		}
+	}
+	if (BackToBackCount >= 4) {
+		return "Cannot book continuously for 4 days"
+	}
+	return "";
+}
+
+function onclickSlotc(Slot) {
+	//var UserSlotsPerDate = $.grep(tempStorage.UserSlots, function (n, i) {
+	//    return (n.Selected_Date == tempStorage.SelectedDate)
+	//});
+
 	//Check Booked
 	var blnSlotExist = 0;
 	for (i = 0; i < tempStorage.BookedSlots.length; i++) {
@@ -168,17 +267,22 @@ function onclickSlotc(Slot) {
 
 	var blnSlotExist = 0;
 	for (i = 0; i < tempStorage.UserSlots.length; i++) {
-		var SelectedSlot = tempStorage.UserSlots[i];
-		if (SelectedSlot == Slot) {
+		var SelectedSlot = tempStorage.UserSlots[i]["Selected_Slot"];
+		if (tempStorage.SelectedDate == tempStorage.UserSlots[i]["Selected_Date"] && SelectedSlot == Slot) {
 			blnSlotExist = 1;
+			tempStorage.UserSlots.splice(i, 1);
 			break;
 		}
 	}
-	if (blnSlotExist == 1) {
-		tempStorage.UserSlots.splice(tempStorage.UserSlots.indexOf(Slot), 1);
+	if (tempStorage.UserSlots.length >= 7) {
+		alert("Maximum slot selection reached");
+		return;
 	}
-	else {
-		tempStorage.UserSlots.push(Slot);
+	if (blnSlotExist == 0) {
+		var objUS = {};
+		objUS["Selected_Slot"] = Slot;
+		objUS["Selected_Date"] = tempStorage.SelectedDate;
+		tempStorage.UserSlots.push(objUS);
 	}
 
 	UpdateSlotSlection();
@@ -193,7 +297,9 @@ function UpdateSlotSlection() {
 		$('#divL1S' + i).removeClass("BookedByUser");
 		$('#divL1S' + i).addClass("Free");
 		if (i <= 10) {
+			$('#divL2S' + i).removeClass("Blocked");
 			$('#divL2S' + i).removeClass("Booked");
+			$('#divL2S' + i).removeClass("BookedByUser");
 			$('#divL2S' + i).addClass("Free");
 		}
 	}
@@ -201,8 +307,12 @@ function UpdateSlotSlection() {
 		var SelectedSlot = tempStorage.BookedSlots[i];
 		$('#div' + SelectedSlot).addClass("Blocked");
 	}
-	for (i = 0; i < tempStorage.UserSlots.length; i++) {
-		var SelectedSlot = tempStorage.UserSlots[i];
+
+	var UserSlotsPerDate = $.grep(tempStorage.UserSlots, function(n, i) {
+		return (n.Selected_Date == tempStorage.SelectedDate)
+	});
+	for (i = 0; i < UserSlotsPerDate.length; i++) {
+		var SelectedSlot = UserSlotsPerDate[i]["Selected_Slot"];
 		$('#div' + SelectedSlot).addClass("Booked");
 	}
 	for (i = 0; i < tempStorage.UserBookedSlots.length; i++) {
@@ -213,7 +323,7 @@ function UpdateSlotSlection() {
 }
 
 function CalculatePrice() {
-	var datBookingDate = new Date($('#idBookingDate').val());
+	var datBookingDate = new Date(tempStorage.SelectedDate);
 	var arrDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	var strDayName = arrDays[datBookingDate.getDay()];
 	var decTotalPrice = 0;
@@ -223,7 +333,7 @@ function CalculatePrice() {
 		blnWeekEnd = true;
 	}
 	for (i = 0; i < tempStorage.UserSlots.length; i++) {
-		var SelectedSlot = tempStorage.UserSlots[i];
+		var SelectedSlot = tempStorage.UserSlots[i]["Selected_Slot"];
 		var decPrice = 0;
 		if (SelectedSlot.indexOf("L1") >= 0) {
 			decPrice = 40;
@@ -253,11 +363,15 @@ function onclickSubmit() {
 		alert("Sorry, Maximum of seven slots allowed to select");
 		return;
 	}
+	if (parseInt(tempStorage.UserBookingTimesForMonth) > 2) {
+		alert("Sorry, Maximum two bookings per month");
+		return;
+	}
 	if ($('#chkAcknowledge').prop('checked') == false) {
 		alert("Please select the acknowledgement");
 		return;
 	}
-	$('#hdnSelectedSlots').val(tempStorage.UserSlots);
+	//$('#hdnSelectedSlots').val(tempStorage.UserSlots);
 	//$('#btnSubmit').click();
 	Submit();
 }
@@ -268,20 +382,52 @@ function BookSlot(Action) {
 	if (Action == "Book Slot") {
 		strDate = $('#idBookingDate').val();
 	}
+
+	var BookingDate = new Date(tempStorage.SelectedDate);
+	var PreviousDate = new Date();
+	var strPreviousDates = "";
+	for (var i = 1; i <= 4; i++) {
+		PreviousDate.setDate(BookingDate.getDate() - 1);
+		if (strPreviousDates != "") {
+			strPreviousDates += "','";
+		}
+		else {
+			strPreviousDates += "'";
+		}
+		strPreviousDates += PreviousDate;
+	}
+	if (strPreviousDates != "") {
+		strPreviousDates += "'";
+	}
+
 	var Param = {};
 	Param.Action = "Fetch Slots";
 	Param.Date = strDate;
 	Param.NRIC = $('#idNRIC').val();
+	Param.PreviousDates = strPreviousDates;
 	$.ajax({
 		url: '/Test/AjaxServlet',
 		type: "POST",
 		data: 'BodyData=' + JSON.stringify(Param),
+		async: false,
 		success: function(response) {
 			var objResponse = response;
 			tempStorage.SlotsInfo.UserBookingCountForMonth = objResponse.UserBookingCountForMonth;
+			tempStorage.SlotsInfo.UserBookingTimesForMonth = objResponse.UserBookingTimesForMonth;
+			tempStorage.SlotsInfo.LastFourBookingDates = objResponse.LastFourBookingDates;
 			tempStorage.SlotsInfo.UserBookingForDate = objResponse.UserBookingForDate;
 			tempStorage.SlotsInfo.SelectedSlotByDate = objResponse.SelectedSlotByDate;
-			InitSlots();
+
+			//Validate back to back slot
+			var Message = ValidateBackToBack();
+			if (Message != "") {
+				OpenCustomerDetail();
+				alert(Message);
+			}
+			else {
+				InitSlots();
+				$('#mdlCustomerDetail').modal('hide');
+			}
 		},
 		error: function(errorMessage) {
 			alert("Ajax error");
@@ -303,27 +449,45 @@ function Submit() {
 	Param.Mobile = $('#idMobile').val();
 	Param.TotalAmount = $('#idMobile').val();
 	Param.BookingData = [];
-	var BookingData = {};
-	BookingData.BookingDate = $('#idBookingDate').val();
-	var UserSlots = "";
+	//Group selected date
+	var SelectedDateList = [];
 	for (i = 0; i < tempStorage.UserSlots.length; i++) {
-		if (UserSlots != "") {
-			UserSlots += ",";
+		var SelectedDate = tempStorage.UserSlots[i]["Selected_Date"];
+		var blnMatch = false;
+		for (j = 0; j < SelectedDateList.length; j++) {
+			if (SelectedDateList[j] == SelectedDate) {
+				blnMatch = true;
+			}
 		}
-		UserSlots += tempStorage.UserSlots[i];
+		if (blnMatch) {
+			continue;
+		}
+		SelectedDateList.push(SelectedDate);
 	}
-	BookingData.BookingSlot = UserSlots;
-	Param.BookingData.push(BookingData);
-	var BookingData = {};
-	BookingData.BookingDate = "2023-06-19";
-	BookingData.BookingSlot = "L2S1,L2S2";
-	Param.BookingData.push(BookingData);
+	for (i = 0; i < SelectedDateList.length; i++) {
+		var SelectedDate = SelectedDateList[i];
+		var BookingData = {};
+		BookingData.BookingDate = SelectedDate;
+		var strBookingSlot = "";
+		for (j = 0; j < tempStorage.UserSlots.length; j++) {
+			if (SelectedDate == tempStorage.UserSlots[j]["Selected_Date"]) {
+				if (strBookingSlot != "") {
+					strBookingSlot = strBookingSlot + ",";
+				}
+				strBookingSlot = strBookingSlot + tempStorage.UserSlots[j]["Selected_Slot"];
+			}
+		}
+		BookingData.BookingSlot = strBookingSlot;
+		Param.BookingData.push(BookingData);
+	}
+	console.log(Param.BookingData);
 	$.ajax({
 		url: '/Test/AjaxServlet',
 		type: "POST",
 		data: 'BodyData=' + JSON.stringify(Param),
 		success: function(response) {
 			console.log(response);
+			location.reload();
 		},
 		error: function(errorMessage) {
 			alert("Ajax error");
