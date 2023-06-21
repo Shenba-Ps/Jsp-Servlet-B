@@ -35,11 +35,37 @@ $(function() {
 			$(this).val("");
 		}
 	});
+
+	$('#idBookingDate').change(function() {
+		var UserDate = $(this).val();
+		if (parseInt($.inArray(UserDate, tempStorage.TwentyOne.UserSelctedDates)) < 0) {
+			tempStorage.TwentyOne.UserSelctedDates.push(UserDate);
+		}
+		BindUserSelctedDateInList();
+		$(this).val("");
+	});
 });
+
+function BindUserSelctedDateInList() {
+	var HTMLData = "";
+	for (i = 0; i < tempStorage.TwentyOne.UserSelctedDates.length; i++) {
+		var UserDate = tempStorage.TwentyOne.UserSelctedDates[i];
+		HTMLData += "<div class='row form-group'><div class='col-xs-8 RightAlign' style='font-weight:600;color:#000080;font-size:14px;'>" + UserDate + "</div>"
+		HTMLData += "<div class='col-xs-4'><a style='color:#000080;font-size:14px;' onclick='RemoveSelectedDate(" + i + ")'>Delete</i></div>"
+		HTMLData += "</div>";
+	}
+	$('#divUserSelectedDateList').html(HTMLData);
+}
+
+function RemoveSelectedDate(Index) {
+	tempStorage.TwentyOne.UserSelctedDates.splice(Index, 1);
+	BindUserSelctedDateInList();
+}
 
 function InitPage() {
 	tempStorage.SlotsInfo = {};
 	tempStorage.UserSlots = [];
+	tempStorage.TwentyOne = { "UserSelctedDates": [] };
 
 	$('#idUsageTrade').val("FB");
 	OpenCustomerDetail();
@@ -178,7 +204,7 @@ function onclickBookSlot() {
 		$('#errMobile').show();
 		blnError = 1;
 	}
-	if ($('#idBookingDate').val() == "") {
+	if (tempStorage.TwentyOne.UserSelctedDates.length == 0) {
 		$('#idBookingDate').addClass("ControlError");
 		$('#errBookingDate').html("* Please select booking date");
 		$('#errBookingDate').show();
@@ -188,9 +214,9 @@ function onclickBookSlot() {
 		return;
 	}
 	//$('#btnBookingSlot').click();
-	tempStorage.SelectedDate = $('#idBookingDate').val();
 
-	BookSlot("Book Slot");
+
+	BookSlot();
 }
 
 function ValidateBackToBack() {
@@ -371,40 +397,52 @@ function onclickSubmit() {
 		alert("Please select the acknowledgement");
 		return;
 	}
-	//$('#hdnSelectedSlots').val(tempStorage.UserSlots);
-	//$('#btnSubmit').click();
 	Submit();
 }
 
 
-function BookSlot(Action) {
-	var strDate = "";
-	if (Action == "Book Slot") {
-		strDate = $('#idBookingDate').val();
-	}
-
-	var BookingDate = new Date(tempStorage.SelectedDate);
-	var PreviousDate = new Date();
-	var strPreviousDates = "";
-	for (var i = 1; i <= 4; i++) {
-		PreviousDate.setDate(BookingDate.getDate() - 1);
-		if (strPreviousDates != "") {
-			strPreviousDates += "','";
+function BookSlot() {
+	//Bind Tab
+	var HTMLData = "";
+	for (i = 0; i < tempStorage.TwentyOne.UserSelctedDates.length; i++) {
+		var UserDate = tempStorage.TwentyOne.UserSelctedDates[i];
+		HTMLData += "<div>";
+		if (i == 0) {
+			HTMLData += "<div id='div" + i + "' class='tablinks tablinksActive' style = 'float:left;' onClick = 'onclickDateTab(this," + i + ")' > " + UserDate + "</div > ";
 		}
 		else {
-			strPreviousDates += "'";
+			HTMLData += "<div id='div" + i + "' class='tablinks' style = 'float:left;' onClick = 'onclickDateTab(this," + i + ")' > " + UserDate + "</div > ";
 		}
-		strPreviousDates += PreviousDate;
-	}
-	if (strPreviousDates != "") {
-		strPreviousDates += "'";
-	}
 
+		HTMLData += "</div>";
+	}
+	$('#divTab').html(HTMLData);
+	$('#mdlCustomerDetail').modal('hide');
+	tempStorage.TwentyOne.SelectedTabDate = tempStorage.TwentyOne.UserSelctedDates[0];
+	tempStorage.SelectedDate = tempStorage.TwentyOne.UserSelctedDates[0];
+	tempStorage.TwentyOne.OldTab = "";
+	FetchSlot();
+}
+
+function onclickDateTab(objTab, Index) {
+	if (tempStorage.TwentyOne.OldTab != null && tempStorage.TwentyOne.OldTab != "") {
+		tempStorage.TwentyOne.OldTab.className = "tablinks";
+	}
+	else {
+		$('#div0').removeClass("tablinksActive");
+	}
+	tempStorage.TwentyOne.OldTab = objTab;
+	tempStorage.TwentyOne.SelectedTabDate = tempStorage.TwentyOne.UserSelctedDates[Index];
+	tempStorage.SelectedDate = tempStorage.TwentyOne.UserSelctedDates[Index];
+	objTab.className = "tablinks tablinksActive";
+	FetchSlot();
+}
+
+function FetchSlot() {
 	var Param = {};
 	Param.Action = "Fetch Slots";
-	Param.Date = strDate;
+	Param.Date = tempStorage.TwentyOne.SelectedTabDate;
 	Param.NRIC = $('#idNRIC').val();
-	Param.PreviousDates = strPreviousDates;
 	$.ajax({
 		url: '/Test/AjaxServlet',
 		type: "POST",
@@ -426,11 +464,10 @@ function BookSlot(Action) {
 			}
 			else {
 				InitSlots();
-				$('#mdlCustomerDetail').modal('hide');
 			}
 		},
 		error: function(errorMessage) {
-			alert("Ajax error");
+			alert(errorMessage);
 		}
 	});
 }

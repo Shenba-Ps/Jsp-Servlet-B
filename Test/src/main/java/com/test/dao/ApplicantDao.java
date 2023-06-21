@@ -1,6 +1,5 @@
 package com.test.dao;
 
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -15,14 +14,13 @@ import com.test.database.DbConnection;
 import com.test.model.Applicant;
 
 public class ApplicantDao {
-	
+
 	Connection connection = null;
 	Statement st = null;
 	PreparedStatement preparedStatement = null;
 	ResultSet resultSet = null;
-	
-	
-	public int saveBooking(Applicant applicantObj, Date createdDate, Timestamp timeStampObj){
+
+	public int saveBooking(Applicant applicantObj, Date createdDate, Timestamp timeStampObj) {
 		int result = 0;
 		String insertQuery = "insert into space_booking(application_number,name,"
 				+ "address,nric_number,email,usage_trade,usage_trade_others,home_ph_no,office_ph_no,hand_ph_no,"
@@ -31,24 +29,23 @@ public class ApplicantDao {
 				+ "L2s6,L2s7,L2s8,L2s9,L2s10,no_of_days_booked,approval_status,oic_comment,oic_followup_date_time,"
 				+ "created_date,created_date_time,booking_month,selected_slots) "
 				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		
-		
-		
+
 		try {
 			connection = new DbConnection().getConnection();
 			preparedStatement = connection.prepareStatement(insertQuery);
-			preparedStatement.setString(1, applicantObj.getApplicationNumber());	
+			preparedStatement.setString(1, applicantObj.getApplicationNumber());
 			preparedStatement.setString(2, applicantObj.getName());
 			preparedStatement.setString(3, applicantObj.getAddress());
 			preparedStatement.setString(4, applicantObj.getNricNumber());
 			preparedStatement.setString(5, applicantObj.getEmail());
 			preparedStatement.setString(6, applicantObj.getUsageTrade());
 			preparedStatement.setString(7, applicantObj.getUsageTradeOthers());
-			
+
 			preparedStatement.setString(8, applicantObj.getHomePhoneNumber());
 			preparedStatement.setString(9, applicantObj.getOfficePhoneNumber());
-			preparedStatement.setString(10, applicantObj.getHandPhoneNumber());			
-			preparedStatement.setDouble(11, applicantObj.getTotalAmount());;
+			preparedStatement.setString(10, applicantObj.getHandPhoneNumber());
+			preparedStatement.setDouble(11, applicantObj.getTotalAmount());
+			;
 			preparedStatement.setString(12, applicantObj.getBookingDate());
 			preparedStatement.setString(13, applicantObj.getL1s1());
 			preparedStatement.setString(14, applicantObj.getL1s2());
@@ -96,9 +93,9 @@ public class ApplicantDao {
 				System.out.println("Error while inserting into table");
 			}
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				connection.close();
 				preparedStatement.close();
@@ -108,14 +105,12 @@ public class ApplicantDao {
 			}
 
 		}
-		
+
 		return result;
-		
+
 	}
-	
-	
-	public List<Applicant> getBookingListOfCurrentMonth(
-			Date monthStratDate, Date monthEndDate, String email) {
+
+	public List<Applicant> getBookingListOfCurrentMonth(Date monthStratDate, Date monthEndDate, String email) {
 
 		List<Applicant> listApplicant = new ArrayList<>();
 
@@ -199,23 +194,22 @@ public class ApplicantDao {
 		System.out.println(count);
 		return listApplicant;
 	}
-	
+
 	public long getBookingListOfCurrentMonthByNric(int bookingMonth, String nric) {
 
 		long count = 0;
 
 		String selectQuery = "select count(*) from space_booking where booking_month = ? and nric_number = ?";
-		
+
 		try {
 			connection = new DbConnection().getConnection();
 			preparedStatement = connection.prepareStatement(selectQuery);
 			preparedStatement.setInt(1, bookingMonth);
 			preparedStatement.setString(2, nric);
-			
+
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				count = resultSet.getLong(1);
-		
 
 			}
 		} catch (SQLException e) {
@@ -233,8 +227,7 @@ public class ApplicantDao {
 		System.out.println(count);
 		return count;
 	}
-	
-	
+
 	public List<Applicant> getAllBookingList() {
 
 		List<Applicant> listApplicant = new ArrayList<>();
@@ -315,11 +308,11 @@ public class ApplicantDao {
 		System.out.println(count);
 		return listApplicant;
 	}
-	
-	public long getCount(){
-		long count = 0 ;
+
+	public long getCount() {
+		long count = 0;
 		String query = "select count(*) from space_booking";
-		
+
 		try {
 			connection = new DbConnection().getConnection();
 			preparedStatement = connection.prepareStatement(query);
@@ -339,11 +332,11 @@ public class ApplicantDao {
 			}
 
 		}
-		
+
 		return count;
-		
+
 	}
-	
+
 	public Applicant getApplicationById(String applicationNumber) throws SQLException {
 		Applicant ap = new Applicant();
 		String selectQuery = "SELECT * FROM space_booking WHERE application_number = ?";
@@ -402,11 +395,11 @@ public class ApplicantDao {
 				ap.setOicFollowUpdateTime(resultSet.getString("oic_followup_date_time"));
 				ap.setCreatedDate(resultSet.getString("created_date"));
 				ap.setCreatedDateTime(resultSet.getString("created_date_time"));
-	            ap.setSlectedSlots(resultSet.getString("selected_slots")); 
-	            ap.setBookingMonth(Integer.parseInt(resultSet.getString("booking_month")));
-				
+				ap.setSlectedSlots(resultSet.getString("selected_slots"));
+				ap.setBookingMonth(Integer.parseInt(resultSet.getString("booking_month")));
+
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			printSQLException(e);
 		} finally {
 			try {
@@ -497,7 +490,7 @@ public class ApplicantDao {
 //		return statusList;
 //	}
 //	
-	
+
 //	public boolean updateApplication(Applicant applicant) throws SQLException {
 //        String sql = "UPDATE app.space_booking SET approval_status = ?";
 //        sql += " WHERE application_number = ?";
@@ -515,16 +508,13 @@ public class ApplicantDao {
 //        disconnect();
 //        return rowUpdated;     
 //    }
-	
-	
+
 	private void printSQLException(SQLException ex) {
 		for (Throwable e : ex) {
 			if (e instanceof SQLException) {
 				e.printStackTrace(System.err);
-				System.err.println("SQLState: "
-						+ ((SQLException) e).getSQLState());
-				System.err.println("Error Code: "
-						+ ((SQLException) e).getErrorCode());
+				System.err.println("SQLState: " + ((SQLException) e).getSQLState());
+				System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
 				System.err.println("Message: " + e.getMessage());
 				Throwable t = ex.getCause();
 				while (t != null) {
@@ -535,9 +525,8 @@ public class ApplicantDao {
 		}
 	}
 
-
 	public List<Applicant> getAllListOfBookingMonth(int intMonth) {
-		
+
 		List<Applicant> listApplicant = new ArrayList<>();
 
 		String selectQuery = "select * from space_booking where booking_month = ?";
@@ -618,7 +607,6 @@ public class ApplicantDao {
 		return listApplicant;
 	}
 
-
 	public List<Applicant> getListOfBookingDate(Date convBookingDate) {
 		List<Applicant> listApplicant = new ArrayList<>();
 
@@ -697,7 +685,6 @@ public class ApplicantDao {
 		}
 		return listApplicant;
 	}
-
 
 	public List<Applicant> getListOfUserByBookingDate(Date convBookingDate, String nricNumber) {
 		List<Applicant> listApplicant = new ArrayList<>();
@@ -778,8 +765,7 @@ public class ApplicantDao {
 		}
 		return listApplicant;
 	}
-	
-	
+
 	public int getBookingCountOfMonth(int month, String nricNumber) {
 		List<Applicant> listApplicant = new ArrayList<>();
 
@@ -793,11 +779,11 @@ public class ApplicantDao {
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				Applicant ap = new Applicant();
-				ap.setNoOfDaysBooked(Integer.parseInt(resultSet.getString("no_of_days_booked")));				
+				ap.setNoOfDaysBooked(Integer.parseInt(resultSet.getString("no_of_days_booked")));
 				listApplicant.add(ap);
 			}
-			for(Applicant obj:listApplicant) {
-				if(obj.getNoOfDaysBooked()>0) {
+			for (Applicant obj : listApplicant) {
+				if (obj.getNoOfDaysBooked() > 0) {
 					count += obj.getNoOfDaysBooked();
 				}
 			}
@@ -816,7 +802,6 @@ public class ApplicantDao {
 		return count;
 	}
 
-
 	public int getBookingCountByNric(int month, String nricNumber) {
 		int count = 0;
 		String selectQuery = "select count(*) from space_booking where booking_month = ? and nric_number = ?";
@@ -827,10 +812,10 @@ public class ApplicantDao {
 			preparedStatement.setString(2, nricNumber);
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				
-					count = resultSet.getInt(1);
-					System.out.println(count);
-				}
+
+				count = resultSet.getInt(1);
+				System.out.println(count);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -845,7 +830,7 @@ public class ApplicantDao {
 		}
 		return count;
 	}
-	
+
 	public List<String> getListOfBookingdate(String nricNumber) {
 		List<String> listApplicant = new ArrayList<>();
 		String selectQuery = "select distinct booking_date from space_booking where nric_number = ?";
@@ -855,11 +840,10 @@ public class ApplicantDao {
 			preparedStatement.setString(1, nricNumber);
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-			
-				listApplicant.add(resultSet.getString("booking_date"))	;
-		        listApplicant.toArray();
-			System.out.println(resultSet.getString("booking_date"));
-			
+
+				listApplicant.add(resultSet.getString("booking_date"));
+				listApplicant.toArray();
+				System.out.println(resultSet.getString("booking_date"));
 
 			}
 		} catch (SQLException e) {
@@ -874,7 +858,7 @@ public class ApplicantDao {
 			}
 
 		}
-	
+
 		return listApplicant;
 	}
 }

@@ -78,3 +78,19 @@
 	width: 200px;
 	text-align: Left;
 }
+
+.tablinks {
+	text-align: center;
+	width: 200px;
+	border: 1px solid gray;
+	background-color: lightgray;
+	border: 1px solid black;
+	width: 200px;
+	font-weight: 20px;
+	cursor: pointer;
+}
+
+.tablinksActive {
+	background-color: green !important;
+	color: white;
+}

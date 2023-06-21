@@ -32,6 +32,7 @@
 					<div class="form-group" onClick="OpenCustomerDetail()"
 						style="font-style: underline; color: blue;">Edit Customer
 						Detail</div>
+					<div id="divTab"></div><br/>
 					<div class="Title form-group" style="text-align: center;">LEVEL
 						1</div>
 					<div class="row">
@@ -203,8 +204,9 @@
 									<label>Home</label>
 								</div>
 								<div class="col-xs-6">
-									<input class="form-control LandlineNumber InputClear" type="text"
-										id="idHomeTel" name="nmHome" maxlength="8" value="">
+									<input class="form-control LandlineNumber InputClear"
+										type="text" id="idHomeTel" name="nmHome" maxlength="8"
+										value="">
 									<div class="ControlErrorMessage" id="errHomeTel"></div>
 								</div>
 							</div>
@@ -236,6 +238,11 @@
 									<input class="form-control InputClear" type="date"
 										id="idBookingDate" name="nmBookingDate" value="">
 									<div class="ControlErrorMessage" id="errBookingDate"></div>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-xs-12">
+									<div id="divUserSelectedDateList"></div>
 								</div>
 							</div>
 						</div>
