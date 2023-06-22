@@ -34,7 +34,7 @@ public class OicServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		doPost(request, response);
 	}
 
 	
@@ -51,7 +51,7 @@ public class OicServlet extends HttpServlet {
 		try {
 			List<Applicant> pendingStatusList = oicDao.getApplicationByApprovalStatus(status);
 			request.setAttribute("pendingStatusList", pendingStatusList);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("BookingApproval.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("BookingApprovalT.jsp");
 			dispatcher.forward(request, response);
 		} catch (SQLException e) {
 			
@@ -59,16 +59,11 @@ public class OicServlet extends HttpServlet {
 		}
 	}
 		else if(url.equals("/reject")) {
-			String appNo = request.getParameter("hdnRefNo");
-			String oicComments = request.getParameter("nmComments");
-			try {
-				Applicant applicant = applicantDao.getApplicationById(appNo);
-				applicant.setOicComment(oicComments);
-				oicService.updateStatus(applicant);
-			} catch (SQLException | ParseException e) {
-				
-				e.printStackTrace();
-			}
+			System.out.println("/reject");
+			String appNo = request.getParameter("applicationNumber");
+			String oicComments = request.getParameter("nmReason");
+			System.out.println("----------------------------------------------------------------"+appNo);
+			System.out.println("----------------------------------------------------------------"+oicComments);
 		}
 		else if(url.equals("/approval")) {
 			System.out.println("----------------appno----------------------");
